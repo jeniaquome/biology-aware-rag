@@ -61,17 +61,16 @@ test.describe('Biology-Aware RAG Application', () => {
   test('should populate input when clicking example query', async ({ page }) => {
     await page.goto('/');
 
-    const queryInput = page.locator('.query-input');
     const firstExample = page.locator('.example-query').first();
 
     // Click example query
     await firstExample.click();
 
-    // Check that loading indicator appears (query is being processed)
-    await expect(page.locator('.loading')).toBeVisible({ timeout: 1000 });
+    // Check that either loading or results appear (query is being processed)
+    await expect(page.locator('.loading, .results-section')).toBeVisible({ timeout: 5000 });
   });
 
-  test('should show loading state when querying', async ({ page }) => {
+  test('should show results when querying', async ({ page }) => {
     await page.goto('/');
 
     const queryInput = page.locator('.query-input');
@@ -83,8 +82,11 @@ test.describe('Biology-Aware RAG Application', () => {
     // Click analyze
     await analyzeButton.click();
 
-    // Check loading state
-    await expect(page.locator('.loading')).toBeVisible({ timeout: 2000 });
+    // Check results appear (may skip loading if response is fast)
+    await expect(page.locator('.results-section')).toBeVisible({ timeout: 10000 });
+
+    // Verify AI Analysis section appears
+    await expect(page.locator('.result-card h3').first()).toHaveText('AI Analysis');
   });
 
   test('should have responsive design elements', async ({ page }) => {
@@ -111,7 +113,23 @@ test.describe('Query Functionality', () => {
     await queryInput.fill('Show me TREM2 data');
     await queryInput.press('Enter');
 
-    // Should show loading
-    await expect(page.locator('.loading')).toBeVisible({ timeout: 2000 });
+    // Should show loading or results
+    await expect(page.locator('.loading, .results-section')).toBeVisible({ timeout: 5000 });
+  });
+
+  test('should display relevant data records in results', async ({ page }) => {
+    await page.goto('/');
+
+    // Click on the outliers example query
+    await page.locator('.example-query').first().click();
+
+    // Wait for results
+    await expect(page.locator('.results-section')).toBeVisible({ timeout: 10000 });
+
+    // Check that relevant records are shown
+    await expect(page.locator('.records-list')).toBeVisible();
+
+    // Verify at least one record item exists
+    await expect(page.locator('.record-item').first()).toBeVisible();
   });
 });
