@@ -1,33 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-
-interface TranscriptomicsRecord {
-  id: string;
-  date: string;
-  mouseModel: string;
-  tissue: string;
-  gene: string;
-  expressionLevel: number;
-  normalizedExpression: number;
-  spatialRegion: string;
-  experimentId: string;
-  researcher: string;
-  targetValidationStatus: 'validated' | 'under_review' | 'outlier' | 'inconclusive';
-  notes: string;
-  therapeuticRelevance: 'high' | 'medium' | 'low';
-}
-
-interface QueryResponse {
-  answer: string;
-  retrievedContext: string;
-  relevantRecords: TranscriptomicsRecord[];
-  metadata: {
-    totalRecordsSearched: number;
-    targetsAnalyzed: number;
-    timestamp: string;
-  };
-}
+import { executeQuery, type QueryResponse, type TranscriptomicsRecord } from '@/lib/query-service';
 
 const exampleQueries = [
   "What are the outliers in therapeutic target validation?",
@@ -118,17 +92,11 @@ export default function Home() {
     setError(null);
 
     try {
-      const response = await fetch('/api/query', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: searchQuery })
-      });
+      // Simulate async delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 500));
 
-      if (!response.ok) {
-        throw new Error('Failed to process query');
-      }
-
-      const data = await response.json();
+      // Execute query client-side (works on GitHub Pages static hosting)
+      const data = executeQuery(searchQuery);
       setResult(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
