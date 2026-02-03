@@ -302,19 +302,59 @@ Remember: You are supporting REAL drug discovery decisions. Accuracy and scienti
       answer = generateDemoResponse(query, retrievedContext);
     }
 
-    // Extract relevant data for display
-    const relevantRecords = spatialTranscriptomicsData.filter(record => {
-      const lowerQuery = query.toLowerCase();
-      return record.gene.toLowerCase().includes(lowerQuery) ||
-        record.mouseModel.toLowerCase().includes(lowerQuery) ||
-        record.notes.toLowerCase().includes(lowerQuery) ||
-        (lowerQuery.includes('outlier') && record.targetValidationStatus === 'outlier');
+    // Extract relevant data for display - smarter matching
+    const lowerQuery = query.toLowerCase();
+    let relevantRecords = spatialTranscriptomicsData.filter(record => {
+      // Direct gene/model match
+      if (record.gene.toLowerCase().includes(lowerQuery) ||
+          record.mouseModel.toLowerCase().includes(lowerQuery) ||
+          record.notes.toLowerCase().includes(lowerQuery)) {
+        return true;
+      }
+      // Outlier queries
+      if ((lowerQuery.includes('outlier') || lowerQuery.includes('validation')) &&
+          record.targetValidationStatus === 'outlier') {
+        return true;
+      }
+      // Alzheimer's/AD queries
+      if ((lowerQuery.includes('alzheimer') || lowerQuery.includes('app/ps1') ||
+           lowerQuery.includes('trem2') || lowerQuery.includes(' ad ')) &&
+          record.mouseModel.includes('APP/PS1')) {
+        return true;
+      }
+      // HER2/Breast cancer queries
+      if ((lowerQuery.includes('her2') || lowerQuery.includes('breast') ||
+           lowerQuery.includes('balb')) &&
+          record.mouseModel.includes('HER2')) {
+        return true;
+      }
+      // Pancreatic/KRAS queries
+      if ((lowerQuery.includes('kras') || lowerQuery.includes('pancrea') ||
+           lowerQuery.includes('pdac')) &&
+          record.mouseModel.includes('Kras')) {
+        return true;
+      }
+      // Score/ranking queries - show high therapeutic relevance
+      if ((lowerQuery.includes('score') || lowerQuery.includes('highest') ||
+           lowerQuery.includes('best') || lowerQuery.includes('top')) &&
+          record.therapeuticRelevance === 'high') {
+        return true;
+      }
+      return false;
     });
+
+    // If no specific matches, show the most relevant records (outliers + recent)
+    if (relevantRecords.length === 0) {
+      relevantRecords = [
+        ...getOutliers().slice(0, 3),
+        ...spatialTranscriptomicsData.filter(r => r.therapeuticRelevance === 'high').slice(0, 2)
+      ];
+    }
 
     return NextResponse.json({
       answer,
       retrievedContext: retrievedContext.substring(0, 500) + '...',
-      relevantRecords: relevantRecords.slice(0, 5),
+      relevantRecords: relevantRecords.slice(0, 6),
       metadata: {
         totalRecordsSearched: spatialTranscriptomicsData.length,
         targetsAnalyzed: therapeuticTargets.length,
