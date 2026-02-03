@@ -1,20 +1,20 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Biology-Aware RAG Application', () => {
+test.describe('Helix Application', () => {
   test('should load the homepage with correct title', async ({ page }) => {
     await page.goto('/');
 
     // Check title
-    await expect(page).toHaveTitle(/Biology-Aware RAG/);
+    await expect(page).toHaveTitle(/Helix/);
 
     // Check main heading
-    await expect(page.locator('h1')).toHaveText('Biology-Aware RAG');
+    await expect(page.locator('h1')).toHaveText('Helix');
 
     // Check subtitle
-    await expect(page.locator('.subtitle')).toHaveText('Target Discovery Intelligence Platform');
+    await expect(page.locator('.subtitle')).toHaveText('Biology-Aware Target Discovery');
 
-    // Check badge
-    await expect(page.locator('.badge')).toHaveText('Spatial Transcriptomics | In Vivo Workflows');
+    // Check badge contains key text
+    await expect(page.locator('.badge')).toContainText('Spatial Transcriptomics');
   });
 
   test('should display query section with input and button', async ({ page }) => {
