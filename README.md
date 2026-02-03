@@ -94,4 +94,4 @@ This application demonstrates Quome's capability to build "biology-aware" system
 
 ---
 
-Built with [Quome](https://quome.io)
+Built with [Quome](https://quome.com)
