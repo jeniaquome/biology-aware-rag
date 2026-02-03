@@ -146,9 +146,142 @@ body {
   gap: 1.5rem;
 }
 
+/* Tablet breakpoint */
 @media (max-width: 900px) {
   .results-section {
     grid-template-columns: 1fr;
+  }
+
+  .metadata-bar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}
+
+/* Mobile breakpoint */
+@media (max-width: 600px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  .header .subtitle {
+    font-size: 0.875rem;
+  }
+
+  .header .badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .query-section {
+    padding: 1rem;
+  }
+
+  .query-section h2 {
+    font-size: 0.9rem;
+  }
+
+  .query-input-wrapper {
+    flex-direction: column;
+  }
+
+  .query-input {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .query-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    width: 100%;
+  }
+
+  .example-queries {
+    gap: 0.4rem;
+  }
+
+  .example-query {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .result-card {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .result-card h3 {
+    font-size: 0.9rem;
+  }
+
+  .answer-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .record-item {
+    padding: 0.75rem;
+  }
+
+  .record-item .gene {
+    font-size: 1rem;
+  }
+
+  .record-item .meta {
+    font-size: 0.75rem;
+  }
+
+  .record-item .notes {
+    font-size: 0.8rem;
+  }
+
+  .status-badge {
+    font-size: 0.65rem;
+    padding: 0.1rem 0.4rem;
+  }
+
+  .context-preview {
+    font-size: 0.7rem;
+    padding: 0.75rem;
+    max-height: 150px;
+  }
+
+  .metadata-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.4rem;
+    padding: 0.6rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .loading {
+    padding: 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Small mobile breakpoint */
+@media (max-width: 380px) {
+  .container {
+    padding: 0.75rem;
+  }
+
+  .header h1 {
+    font-size: 1.25rem;
+  }
+
+  .example-query {
+    font-size: 0.7rem;
+    padding: 0.35rem 0.5rem;
   }
 }
 
